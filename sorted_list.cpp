@@ -124,8 +124,10 @@ int main() {
     list.InsertItem(30);
     list.InsertItem(10);
     list.InsertItem(20);
+    list.InsertItem(-7);
     list.InsertItem(70);
     list.InsertItem(60);
+    list.InsertItem(-5);
 
     cout << "Length of list: " << list.LengthIs() << endl;
 
