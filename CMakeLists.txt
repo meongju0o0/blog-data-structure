@@ -3,4 +3,8 @@ project(meongju0o0-data-structure)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(meongju0o0-data-structure unsorted_list.cpp)
+# unsorted_list
+add_executable(unsorted_list unsorted_list.cpp)
+
+# sorted_list
+add_executable(sorted_list sorted_list.cpp)
