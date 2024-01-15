@@ -32,7 +32,7 @@ SortedType::SortedType() {
     length = 0;
     currentPos = 0;
     for (int& i : info) {
-        i = INT_MIN;
+        i = INT_MIN; //편의상 INT_MIN으로 고정, 자료형 변경 시 수정 필요
     }
 }
 
