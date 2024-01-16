@@ -16,11 +16,11 @@ class StackType;
 class StackType {
 public:
     StackType();
-    [[nodiscard]] bool IsFull() const;
-    [[nodiscard]] bool IsEmpty() const;
-    void Push(ItemType newItem);
-    ItemType Pop();
-    ItemType Top();
+    [[nodiscard]] bool IsFull() const; //스택이 가득 차있는지 확인
+    [[nodiscard]] bool IsEmpty() const; //스택이 비어있는지 확인
+    void Push(ItemType newItem); //스택 상단에 아이템 삽입
+    ItemType Pop(); //스택 상단의 아이템 삭제
+    ItemType Top(); //스택 상단의 아이템 확인
 
 private:
     int top;
@@ -62,7 +62,6 @@ ItemType StackType::Top() {
 
 int main() {
     StackType myStack;
-
     // 푸시
     try {
         for (int i = 1; i <= 5; i++) {
@@ -72,14 +71,12 @@ int main() {
     } catch (const runtime_error& e) {
         cout << "Exception caught: " << e.what() << endl;
     }
-
     // 탑
     try {
         cout << "Top item of the stack: " << myStack.Top() << endl;
     } catch (const runtime_error& e) {
         cout << "Exception caught: " << e.what() << endl;
     }
-
     // 팝
     cout << "Popping items: ";
     try {
@@ -90,6 +87,5 @@ int main() {
     } catch (const runtime_error& e) {
         cout << "Exception caught: " << e.what() << endl;
     }
-
     return EXIT_SUCCESS;
 }
