@@ -11,3 +11,6 @@ add_executable(sorted_list sorted_list.cpp)
 
 # stack
 add_executable(stack stack.cpp)
+
+# queue
+add_executable(queue queue.cpp)
