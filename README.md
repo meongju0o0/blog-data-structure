@@ -9,4 +9,4 @@
 
 ### License
 
-© 2024 meongju0o0 uses MIT License. Powered by Nell Dale.
+© 2024 meongju0o0 uses MIT License.
