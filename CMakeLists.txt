@@ -14,3 +14,6 @@ add_executable(stack stack.cpp)
 
 # queue
 add_executable(queue queue.cpp)
+
+# singly linked list
+add_executable(sll singly_linked_list.cpp)

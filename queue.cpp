@@ -5,10 +5,12 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+
 using namespace std;
 
 #define FULL_QUEUE "queue is full"
 #define EMPTY_QUEUE "queue is empty"
+
 typedef int ItemType;
 class QueueType;
 

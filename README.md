@@ -4,11 +4,8 @@
 - OS: Windows11, 23H2
 - IDE: JetBrain CLion
 - Build Toolchain: CMake 3.27
-  - Compiler: MSYS2(GCC for Windows)
+  - Compiler: MingW(GCC for Windows)
   - C++ Standard: C++23
-> In most cases, MSVC in Visual Studio is also available<br />
-> GCC in UNIX and LINUX are always available<br />
-> However, you must use a C++17 or higher standard
 
 ### License
 
