@@ -44,7 +44,7 @@ public:
 
     [[nodiscard]] Iterator Begin() const { return Iterator(head); }
     [[nodiscard]] Iterator End() const { return Iterator(nullptr); }
-    [[nodiscard]] Iterator RBegin() const { return Iterator(tail); } // 끝에서 시작하는 이터레이터
+    [[nodiscard]] Iterator RBegin() const { return Iterator(tail); }
 };
 
 DLL::Iterator::Iterator(Node* node) : current(node) {}
