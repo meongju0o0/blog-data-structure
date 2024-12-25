@@ -91,7 +91,7 @@ DLL::DLL(const ItemType root_item) {
     head->item = root_item;
     head->next = nullptr;
     head->prev = nullptr;
-    tail = head; // 초기화 시 head와 tail이 동일
+    tail = head;
     size++;
 }
 
@@ -132,7 +132,6 @@ void DLL::Insert(Iterator pos, ItemType new_item) {
     new_node->item = new_item;
 
     if (pos.GetCurrent() == nullptr) {
-        // Tail 뒤에 삽입하는 경우
         if (tail != nullptr) {
             tail->next = new_node;
             new_node->prev = tail;
@@ -148,7 +147,7 @@ void DLL::Insert(Iterator pos, ItemType new_item) {
         if (cur->next != nullptr) {
             cur->next->prev = new_node;
         } else {
-            tail = new_node; // Tail 갱신
+            tail = new_node;
         }
         cur->next = new_node;
     }
@@ -166,13 +165,13 @@ void DLL::Erase(Iterator pos) {
     if (target->prev != nullptr) {
         target->prev->next = target->next;
     } else {
-        head = target->next; // 삭제한 노드가 head라면 갱신
+        head = target->next;
     }
 
     if (target->next != nullptr) {
         target->next->prev = target->prev;
     } else {
-        tail = target->prev; // 삭제한 노드가 tail이라면 갱신
+        tail = target->prev;
     }
 
     delete target;
@@ -194,7 +193,7 @@ int main() {
     }
     cout << endl;
 
-    DLL::Iterator it2 = list.RBegin(); // Tail부터 출력
+    DLL::Iterator it2 = list.RBegin();
     cout << "Items in reverse order: ";
     for (; it2 != list.End(); --it2) {
         cout << *it2 << " ";
