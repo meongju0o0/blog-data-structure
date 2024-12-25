@@ -1,15 +1,11 @@
-//
-// Created by meongju0o0 on 2024-01-16.
-//
-
 #include <iostream>
 #include <stdexcept>
 #include <string>
 
-using namespace std;
-
 #define FULL_QUEUE "queue is full"
 #define EMPTY_QUEUE "queue is empty"
+
+using namespace std;
 
 typedef int ItemType;
 class QueueType;

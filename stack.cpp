@@ -2,11 +2,11 @@
 #include <stdexcept>
 #include <string>
 
-using namespace std;
-
 #define MAX_ITEMS 50
 #define FULL_STACK "stack is full"
 #define EMPTY_STACK "stack is empty"
+
+using namespace std;
 
 typedef int ItemType;
 class StackType;
@@ -14,11 +14,11 @@ class StackType;
 class StackType {
 public:
     StackType();
-    [[nodiscard]] bool IsFull() const; //스택이 가득 차있는지 확인
-    [[nodiscard]] bool IsEmpty() const; //스택이 비어있는지 확인
-    void Push(ItemType newItem); //스택 상단에 아이템 삽입
-    ItemType Pop(); //스택 상단의 아이템 삭제
-    ItemType Top(); //스택 상단의 아이템 확인
+    [[nodiscard]] bool IsFull() const; // 스택이 가득 차있는지 확인
+    [[nodiscard]] bool IsEmpty() const; // 스택이 비어있는지 확인
+    [[nodiscard]] ItemType Top() const; // 스택 상단의 아이템 확인
+    void Push(ItemType newItem); // 스택 상단에 아이템 삽입
+    ItemType Pop(); // 스택 상단의 아이템 삭제
 
 private:
     int top;
@@ -37,7 +37,7 @@ bool StackType::IsFull() const {
     return top == (MAX_ITEMS - 1);
 }
 
-void StackType::Push(ItemType newItem) {
+void StackType::Push(const ItemType newItem) {
     if(IsFull()) {
         throw runtime_error(FULL_STACK);
     }
@@ -51,7 +51,7 @@ ItemType StackType::Pop() {
     return items[top--];
 }
 
-ItemType StackType::Top() {
+ItemType StackType::Top() const {
     if(IsEmpty()) {
         throw runtime_error(EMPTY_STACK);
     }
