@@ -17,34 +17,43 @@ private:
     size_t size = 0;
 
 public:
-    class Iterator { //SLL 객체의 아이템 접근을 위한 iterator
+    class Iterator { // SLL 객체의 아이템 접근을 위한 iterator
     private:
         Node* current;
         Node* previous;
 
     public:
-        explicit Iterator(Node* node); //iterator 객체 생성자
-        ItemType& operator*() const; //SLL Node의 item 접근을 위한 연산자 오버로딩
-        Iterator& operator++(); //SLL iterator가 다음 노드를 지시하도록 하기 위한 연산자 오버로딩
-        bool operator==(const Iterator& other) const; //SLL iterator가 지시하는 노드가 서로 동일한지 확인하는 연산자
-        bool operator!=(const Iterator& other) const; //SLL iterator가 지시하는 노드가 서로 다른지 확인하는 연산자
-        [[nodiscard]] Node* GetCurrent() const; //SLL iterator가 현재 지시하고 있는 노드의 포인터를 반환
+        explicit Iterator(Node* node); // iterator 객체 생성자
+        SLL::Iterator& operator=(const Iterator& other); // iterator 복사 연산자
+        ItemType& operator*() const; // SLL Node의 item 접근을 위한 연산자 오버로딩
+        Iterator& operator++(); // SLL iterator가 다음 노드를 지시하도록 하기 위한 연산자 오버로딩
+        bool operator==(const Iterator& other) const; // SLL iterator가 지시하는 노드가 서로 동일한지 확인하는 연산자
+        bool operator!=(const Iterator& other) const; // SLL iterator가 지시하는 노드가 서로 다른지 확인하는 연산자
+        [[nodiscard]] Node* GetCurrent() const; // SLL iterator가 현재 지시하고 있는 노드의 포인터를 반환
         [[nodiscard]] Node* GetPrevious() const; // 현재 지시하고 있는 노드의 이전 노드의 포인터를 반환
     };
 
     explicit SLL(ItemType root_item);
     ~SLL();
-    [[nodiscard]] bool IsFull() const; //SLL이 가득 차 있는지 확인
-    [[nodiscard]] bool IsEmpty() const; //SLL이 비어있는지 확인
-    [[nodiscard]] size_t SizeIs() const; //SLL의 크기 반환
-    void Insert(Iterator pos, ItemType new_item); //SLL에 아이템 삽입
-    void Erase(Iterator pos); //SLL의 아이템 삭제
+    [[nodiscard]] bool IsFull() const; // SLL이 가득 차 있는지 확인
+    [[nodiscard]] bool IsEmpty() const; // SLL이 비어있는지 확인
+    [[nodiscard]] size_t SizeIs() const; // SLL의 크기 반환
+    void Insert(Iterator pos, ItemType new_item); // SLL에 아이템 삽입
+    void Erase(Iterator pos); // SLL의 아이템 삭제
 
-    [[nodiscard]] Iterator Begin() const { return Iterator(head); } //SLL의 처음 시작위치 반환
-    [[nodiscard]] Iterator End() const { return Iterator(nullptr); } //SLL의 마지막 위치 반환(nullptr)
+    [[nodiscard]] Iterator Begin() const { return Iterator(head); } // SLL의 처음 시작위치 반환
+    [[nodiscard]] Iterator End() const { return Iterator(nullptr); } // SLL의 마지막 위치 반환(nullptr)
 };
 
 SLL::Iterator::Iterator(Node* node) : current(node), previous(nullptr) {}
+
+SLL::Iterator &SLL::Iterator::operator=(const Iterator &other) {
+    if (this != &other) { // 자기 자신이 아닐 때만 복사 수행
+        current = other.current; // 현재 노드 복사
+        previous = other.previous; // 이전 노드 복사
+    }
+    return *this;
+}
 
 ItemType& SLL::Iterator::operator*() const {
     return current->item;
@@ -95,12 +104,12 @@ SLL::~SLL() {
 
 bool SLL::IsFull() const {
     try {
-        const Node* dummy_node = new Node(); //dummy_node가 생성 가능하면 false 반환
+        const Node* dummy_node = new Node(); // dummy_node가 생성 가능하면 false 반환
         delete dummy_node;
         return false;
     }
-    catch(const bad_alloc& e) { //dummy_node가 생성되지 않고 bad_alloc exception 발생
-        return true; //true 반환
+    catch(const bad_alloc& e) { // dummy_node가 생성되지 않고 bad_alloc exception 발생
+        return true; // true 반환
     }
 }
 
@@ -169,10 +178,10 @@ void SLL::Erase(Iterator pos) {
 int main() {
     SLL list(5);
 
-    SLL::Iterator it = list.Begin();
-    list.Insert(it, 10);
-    list.Insert(++it, 15);
-    list.Insert(++it, 20);
+    SLL::Iterator it1 = list.Begin();
+    list.Insert(it1, 10);
+    list.Insert(++it1, 15);
+    list.Insert(++it1, 20);
 
     cout << "List Size: " << list.SizeIs() << endl;
 
@@ -181,16 +190,14 @@ int main() {
     }
     cout << endl;
 
-    SLL::Iterator erase_it = list.Begin();
-    ++erase_it;
-    list.Erase(erase_it);
+    // operator=() 테스트
+    SLL::Iterator it2 = list.Begin();
+    ++it2; // 두 번째 노드(10)로 이동
+    SLL::Iterator it3 = it2; // operator=()로 상태 복사
+    ++it3; // 복사된 이터레이터로 다음 노드(15)로 이동
 
-    cout << "List Size after erasing 10: " << list.SizeIs() << endl;
-
-    for (SLL::Iterator it = list.Begin(); it != list.End(); ++it) {
-        cout << *it << " ";
-    }
-    cout << endl;
+    cout << "Current item in it2: " << *it2 << endl; // 10
+    cout << "Current item in it3: " << *it3 << endl; // 15
 
     return EXIT_SUCCESS;
 }
