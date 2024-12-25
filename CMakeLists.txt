@@ -17,3 +17,6 @@ add_executable(queue queue.cpp)
 
 # singly linked list
 add_executable(sll singly_linked_list.cpp)
+
+# doubly linked list
+add_executable(dll doubly_linked_list.cpp)
