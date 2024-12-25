@@ -1,15 +1,13 @@
-//
-// Created by meongju0o0 on 2024-01-16.
-//
-
 #include <iostream>
 #include <stdexcept>
 #include <string>
+
 using namespace std;
 
 #define MAX_ITEMS 50
 #define FULL_STACK "stack is full"
 #define EMPTY_STACK "stack is empty"
+
 typedef int ItemType;
 class StackType;
 

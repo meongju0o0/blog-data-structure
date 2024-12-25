@@ -13,7 +13,7 @@ struct Node {
 
 class SLL {
 private:
-    Node* root = nullptr;
+    Node* head = nullptr;
     size_t size = 0;
 
 public:
@@ -36,15 +36,14 @@ public:
     ~SLL();
     [[nodiscard]] bool IsFull() const; //SLL이 가득 차 있는지 확인
     [[nodiscard]] bool IsEmpty() const; //SLL이 비어있는지 확인
-    [[nodiscard]] int SizeIs() const; //SLL의 크기 반환
+    [[nodiscard]] size_t SizeIs() const; //SLL의 크기 반환
     void Insert(Iterator pos, ItemType new_item); //SLL에 아이템 삽입
     void Erase(Iterator pos); //SLL의 아이템 삭제
 
-    [[nodiscard]] Iterator Begin() const { return Iterator(root); } //SLL의 처음 시작위치 반환
+    [[nodiscard]] Iterator Begin() const { return Iterator(head); } //SLL의 처음 시작위치 반환
     [[nodiscard]] Iterator End() const { return Iterator(nullptr); } //SLL의 마지막 위치 반환(nullptr)
 };
 
-// SLL::Iterator 클래스의 멤버 함수 정의
 SLL::Iterator::Iterator(Node* node) : current(node), previous(nullptr) {}
 
 ItemType& SLL::Iterator::operator*() const {
@@ -53,8 +52,11 @@ ItemType& SLL::Iterator::operator*() const {
 
 SLL::Iterator& SLL::Iterator::operator++() {
     if (current != nullptr) {
-        previous = current; // 이전 노드를 현재 노드로 업데이트
-        current = current->next;
+        previous = current;
+        // 이전 노드의 포인터를 직전의 현재 노드 정보를 활용하여 추적 관리
+        // 삭제 연산에 대비하기 위함
+
+        current = current->next; // 현재 노드 포인터 관리
     }
     return *this;
 }
@@ -76,14 +78,14 @@ Node* SLL::Iterator::GetPrevious() const {
 }
 
 SLL::SLL(const ItemType root_item) {
-    root = new Node();
-    root->item = root_item;
-    root->next = nullptr;
+    head = new Node();
+    head->item = root_item;
+    head->next = nullptr;
     size++;
 }
 
 SLL::~SLL() {
-    Node* cur_node = root;
+    Node* cur_node = head;
     while(cur_node != nullptr) {
         Node* temp_ptr = cur_node->next;
         delete cur_node;
@@ -103,10 +105,10 @@ bool SLL::IsFull() const {
 }
 
 bool SLL::IsEmpty() const {
-    return root == nullptr;
+    return head == nullptr;
 }
 
-int SLL::SizeIs() const {
+size_t SLL::SizeIs() const {
     return size;
 }
 
@@ -116,20 +118,21 @@ void SLL::Insert(Iterator pos, ItemType new_item) {
         return;
     }
 
-    Node* new_node = new Node();
-    new_node->item = new_item;
+    // pos == End()인 경우, 즉 current == nullptr이라면
+    // "pos 다음에 삽입"이 불가능하므로 예외적으로 처리
+    if (pos.GetCurrent() == nullptr) {
+        cerr << "Iterator is End(), cannot insert after the end of the list." << endl;
+        return;
+    }
 
-    if (pos.GetCurrent() == root) {
-        new_node->next = root;
-        root = new_node;
-    }
-    else {
-        Node* prev_node = pos.GetPrevious();
-        new_node->next = pos.GetCurrent();
-        if (prev_node != nullptr) {
-            prev_node->next = new_node;
-        }
-    }
+    Node* new_node = new Node(); // 새로운 노드 생성
+    new_node->item = new_item; // 새로운 노드에 주어진 아이템 삽입
+
+    // "pos 다음 위치"에 삽입
+    Node* cur = pos.GetCurrent(); // 주어진 pos의 포인터 저장
+    new_node->next = cur->next; // 새로운 노드의 next 포인터는 현재 노드의 다음 노드를 지칭
+    cur->next = new_node; // 현재 노드의 next 포인터는 새로은 노드를 지칭
+
     size++;
 }
 
@@ -139,16 +142,25 @@ void SLL::Erase(Iterator pos) {
         return;
     }
 
-    if (pos.GetCurrent() == root) {
-        Node* temp_ptr = root;
-        root = root->next;
-        delete temp_ptr;
+    // pos == Begin()인 경우, 즉 current == head이라면
+    if (pos.GetCurrent() == head) {
+        Node* temp_ptr = head; // 기존 head 포인터 임시 저장
+        head = head->next; // head 포인터를 head->next로 수정
+        delete temp_ptr; // 기존 head 삭제(메모리 할당 해제)
     }
+
+    // pos != Begin()인 경우, 즉 current != head이라면
     else {
-        Node* prev_node = pos.GetPrevious();
+        Node* prev_node = pos.GetPrevious(); // 현재 노드의 이전 노드 포인터 저장
+
+        // 이전 노드가 nullptr이 아니라면 삭제 연산 수행
+        // (head가 아니면서 이전 노드가 nullptr일 순 없으나, 만일의 경우를 대비한 예외처리)
         if (prev_node != nullptr) {
             prev_node->next = pos.GetCurrent()->next;
-            delete pos.GetCurrent();
+            // 이전 노드의 next 포인터가 현재 노드의 다음 노드 지칭하도록 수정
+            // 현재 노드를 건너뛰게됨
+
+            delete pos.GetCurrent(); // 현재 노드 삭제
         }
     }
     size--;
@@ -156,9 +168,11 @@ void SLL::Erase(Iterator pos) {
 
 int main() {
     SLL list(5);
-    list.Insert(list.Begin(), 10);
-    list.Insert(list.Begin(), 15);
-    list.Insert(list.Begin(), 20);
+
+    SLL::Iterator it = list.Begin();
+    list.Insert(it, 10);
+    list.Insert(++it, 15);
+    list.Insert(++it, 20);
 
     cout << "List Size: " << list.SizeIs() << endl;
 
